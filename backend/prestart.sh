@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-set -a; source .env.local; set +a;
+set -a; source .env; set +a;
 export PYTHONPATH=$(pwd)
 
 python src/backend_pre_start.py
