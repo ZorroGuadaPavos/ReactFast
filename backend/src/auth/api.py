@@ -7,7 +7,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from src.auth.schemas import NewPassword, Token
 from src.auth.services import (
-    CurrentUser,
     SessionDep,
     generate_password_reset_token,
     get_current_active_superuser,
@@ -20,7 +19,6 @@ from src.emails.services import (
     generate_reset_password_email,
     send_email,
 )
-from src.users.schemas import UserPublic
 from src.users.services import get_user_by_email
 
 from . import services
@@ -40,14 +38,6 @@ def login_access_token(session: SessionDep, form_data: Annotated[OAuth2PasswordR
         raise HTTPException(status_code=400, detail='Inactive user')
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(access_token=services.create_access_token(user.id, expires_delta=access_token_expires))
-
-
-@router.post('/login/test-token', response_model=UserPublic)
-def test_token(current_user: CurrentUser) -> Any:
-    """
-    Test access token
-    """
-    return current_user
 
 
 @router.post('/password-recovery/{email}')

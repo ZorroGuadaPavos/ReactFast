@@ -30,12 +30,7 @@ def render_email_template(*, template_name: str, context: dict[str, Any]) -> str
     return html_content
 
 
-def send_email(
-    *,
-    email_to: str,
-    subject: str = '',
-    html_content: str = '',
-) -> None:
+def send_email(*, email_to: str, subject: str = '', html_content: str = '') -> None:
     assert settings.emails_enabled, 'no provided configuration for email variables'
     message = emails.Message(
         subject=subject,

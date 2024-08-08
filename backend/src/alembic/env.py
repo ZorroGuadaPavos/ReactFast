@@ -25,6 +25,7 @@ fileConfig(config.config_file_name)
 from src.core.config import settings
 
 from sqlmodel import SQLModel
+
 target_metadata = SQLModel.metadata
 
 # other values from the config, defined by the needs of env.py,

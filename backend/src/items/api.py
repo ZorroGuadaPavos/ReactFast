@@ -15,13 +15,7 @@ router = APIRouter()
 
 
 @router.put('/{id}', response_model=ItemPublic)
-def update_item(
-    *,
-    session: SessionDep,
-    current_user: CurrentUser,
-    id: uuid.UUID,
-    item_in: ItemUpdate,
-) -> Any:
+def update_item(*, session: SessionDep, current_user: CurrentUser, id: uuid.UUID, item_in: ItemUpdate) -> Any:
     """
     Update an item.
     """

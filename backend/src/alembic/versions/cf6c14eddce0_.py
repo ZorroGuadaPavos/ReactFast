@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7225fccf1e54
+Revision ID: cf6c14eddce0
 Revises: 
-Create Date: 2024-08-07 16:05:44.672109
+Create Date: 2024-08-08 12:15:00.263163
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlmodel.sql.sqltypes
 
 
 # revision identifiers, used by Alembic.
-revision = '7225fccf1e54'
+revision = 'cf6c14eddce0'
 down_revision = None
 branch_labels = None
 depends_on = None
