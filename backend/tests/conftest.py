@@ -8,9 +8,9 @@ from src.core.config import settings
 from src.core.db import engine, init_db
 from src.items.models import Item
 from src.main import app
-from src.tests.utils.user import authentication_token_from_email
-from src.tests.utils.utils import get_superuser_token_headers
 from src.users.models import User
+from tests.utils.user import authentication_token_from_email
+from tests.utils.utils import get_superuser_token_headers
 
 
 @pytest.fixture(scope='module')

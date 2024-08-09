@@ -2,13 +2,13 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from src.core.config import settings
-from src.tests.utils.utils import random_email, random_lower_string
 from src.users import services
 from src.users.models import User
 from src.users.schemas import (
     UserCreate,
     UserUpdate,
 )
+from tests.utils.utils import random_email, random_lower_string
 
 
 def user_authentication_headers(*, client: TestClient, email: str, password: str) -> dict[str, str]:

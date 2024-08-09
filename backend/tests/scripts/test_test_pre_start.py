@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from src.tests_pre_start import init, logger
+from tests.tests_pre_start import init, logger
 
 
 def test_init_successful_connection() -> None:

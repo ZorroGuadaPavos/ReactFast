@@ -3,8 +3,8 @@ from sqlmodel import Session
 from src.items.models import Item
 from src.items.schemas import ItemCreate
 from src.items.services import create_item
-from src.tests.utils.user import create_random_user
-from src.tests.utils.utils import random_lower_string
+from tests.utils.user import create_random_user
+from tests.utils.utils import random_lower_string
 
 
 def create_random_item(db: Session) -> Item:

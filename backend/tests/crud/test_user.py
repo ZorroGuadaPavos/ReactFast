@@ -3,13 +3,13 @@ from sqlmodel import Session
 
 import src.users.services
 from src.auth.services import authenticate, verify_password
-from src.tests.utils.utils import random_email, random_lower_string
 from src.users.models import User
 from src.users.schemas import (
     UserCreate,
     UserUpdate,
 )
 from src.users.services import create_user, update_user
+from tests.utils.utils import random_email, random_lower_string
 
 
 def test_create_user(db: Session) -> None:

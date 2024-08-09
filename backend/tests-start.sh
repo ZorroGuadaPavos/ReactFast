@@ -7,7 +7,7 @@ set -x
 
 alembic upgrade head
 
-python src/tests_pre_start.py
+python tests/tests_pre_start.py
 
 coverage run --source=app -m pytest
 coverage report --show-missing

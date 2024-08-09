@@ -6,12 +6,12 @@ from sqlmodel import Session, select
 
 from src.auth.services import verify_password
 from src.core.config import settings
-from src.tests.utils.utils import random_email, random_lower_string
 from src.users import services
 from src.users.models import User
 from src.users.schemas import (
     UserCreate,
 )
+from tests.utils.utils import random_email, random_lower_string
 
 
 def test_get_users_superuser_me(client: TestClient, superuser_token_headers: dict[str, str]) -> None:
