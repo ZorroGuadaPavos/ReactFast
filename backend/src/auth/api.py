@@ -1,24 +1,14 @@
 from datetime import timedelta
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.auth.schemas import NewPassword, Token
-from src.auth.services import (
-    SessionDep,
-    generate_password_reset_token,
-    get_current_active_superuser,
-    get_password_hash,
-    verify_password_reset_token,
-)
+from src.auth.services import SessionDep, generate_password_reset_token, get_password_hash, verify_password_reset_token
 from src.core.config import settings
 from src.core.schemas import Message
-from src.emails.services import (
-    generate_reset_password_email,
-    send_email,
-)
+from src.emails.services import generate_reset_password_email, send_email
 from src.users.services import get_user_by_email
 
 from . import services
@@ -28,9 +18,6 @@ router = APIRouter()
 
 @router.post('/login/access-token')
 def login_access_token(session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
-    """
-    OAuth2 compatible token login, get an access token for future requests
-    """
     user = services.authenticate(session=session, email=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail='Incorrect email or password')
@@ -83,25 +70,3 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     session.add(user)
     session.commit()
     return Message(message='Password updated successfully')
-
-
-@router.post(
-    '/password-recovery-html-content/{email}',
-    dependencies=[Depends(get_current_active_superuser)],
-    response_class=HTMLResponse,
-)
-def recover_password_html_content(email: str, session: SessionDep) -> Any:
-    """
-    HTML Content for Password Recovery
-    """
-    user = get_user_by_email(session=session, email=email)
-
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail='The user with this username does not exist in the system.',
-        )
-    password_reset_token = generate_password_reset_token(email=email)
-    email_data = generate_reset_password_email(email_to=user.email, email=email, token=password_reset_token)
-
-    return HTMLResponse(content=email_data.html_content, headers={'subject:': email_data.subject})

@@ -29,16 +29,6 @@ def test_get_access_token_incorrect_password(client: TestClient) -> None:
     assert r.status_code == 400
 
 
-def test_use_access_token(client: TestClient, superuser_token_headers: dict[str, str]) -> None:
-    r = client.post(
-        f'{settings.API_V1_STR}/login/test-token',
-        headers=superuser_token_headers,
-    )
-    result = r.json()
-    assert r.status_code == 200
-    assert 'email' in result
-
-
 def test_recovery_password(client: TestClient, normal_user_token_headers: dict[str, str]) -> None:
     with (
         patch('src.core.config.settings.SMTP_HOST', 'smtp.example.com'),
