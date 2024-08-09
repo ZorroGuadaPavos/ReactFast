@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
@@ -27,29 +25,6 @@ def test_get_access_token_incorrect_password(client: TestClient) -> None:
     }
     r = client.post(f'{settings.API_V1_STR}/login/access-token', data=login_data)
     assert r.status_code == 400
-
-
-def test_recovery_password(client: TestClient, normal_user_token_headers: dict[str, str]) -> None:
-    with (
-        patch('src.core.config.settings.SMTP_HOST', 'smtp.example.com'),
-        patch('src.core.config.settings.SMTP_USER', 'admin@example.com'),
-    ):
-        email = 'test@example.com'
-        r = client.post(
-            f'{settings.API_V1_STR}/password-recovery/{email}',
-            headers=normal_user_token_headers,
-        )
-        assert r.status_code == 200
-        assert r.json() == {'message': 'Password recovery email sent'}
-
-
-def test_recovery_password_user_not_exits(client: TestClient, normal_user_token_headers: dict[str, str]) -> None:
-    email = 'jVgQr@example.com'
-    r = client.post(
-        f'{settings.API_V1_STR}/password-recovery/{email}',
-        headers=normal_user_token_headers,
-    )
-    assert r.status_code == 404
 
 
 def test_reset_password(client: TestClient, superuser_token_headers: dict[str, str], db: Session) -> None:

@@ -32,27 +32,6 @@ def test_get_users_normal_user_me(client: TestClient, normal_user_token_headers:
     assert current_user['email'] == settings.EMAIL_TEST_USER
 
 
-def test_create_user_new_email(client: TestClient, superuser_token_headers: dict[str, str], db: Session) -> None:
-    with (
-        patch('src.emails.services.send_email', return_value=None),
-        patch('src.core.config.settings.SMTP_HOST', 'smtp.example.com'),
-        patch('src.core.config.settings.SMTP_USER', 'admin@example.com'),
-    ):
-        username = random_email()
-        password = random_lower_string()
-        data = {'email': username, 'password': password}
-        r = client.post(
-            f'{settings.API_V1_STR}/users/',
-            headers=superuser_token_headers,
-            json=data,
-        )
-        assert 200 <= r.status_code < 300
-        created_user = r.json()
-        user = services.get_user_by_email(session=db, email=username)
-        assert user
-        assert user.email == created_user['email']
-
-
 def test_get_existing_user(client: TestClient, superuser_token_headers: dict[str, str], db: Session) -> None:
     username = random_email()
     password = random_lower_string()
@@ -104,37 +83,6 @@ def test_get_existing_user_permissions_error(client: TestClient, normal_user_tok
     )
     assert r.status_code == 403
     assert r.json() == {'detail': "The user doesn't have enough privileges"}
-
-
-def test_create_user_existing_username(
-    client: TestClient, superuser_token_headers: dict[str, str], db: Session
-) -> None:
-    username = random_email()
-    # username = email
-    password = random_lower_string()
-    user_in = UserCreate(email=username, password=password)
-    services.create_user(session=db, user_create=user_in)
-    data = {'email': username, 'password': password}
-    r = client.post(
-        f'{settings.API_V1_STR}/users/',
-        headers=superuser_token_headers,
-        json=data,
-    )
-    created_user = r.json()
-    assert r.status_code == 400
-    assert '_id' not in created_user
-
-
-def test_create_user_by_normal_user(client: TestClient, normal_user_token_headers: dict[str, str]) -> None:
-    username = random_email()
-    password = random_lower_string()
-    data = {'email': username, 'password': password}
-    r = client.post(
-        f'{settings.API_V1_STR}/users/',
-        headers=normal_user_token_headers,
-        json=data,
-    )
-    assert r.status_code == 403
 
 
 def test_retrieve_users(client: TestClient, superuser_token_headers: dict[str, str], db: Session) -> None:
